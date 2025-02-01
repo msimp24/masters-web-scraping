@@ -1,0 +1,1 @@
+once the week changes, increment the tournament id and add the new tournament to the database
