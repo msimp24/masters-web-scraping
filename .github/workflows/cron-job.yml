@@ -2,7 +2,7 @@ name: Run Golf Leaderboard Scraper
 
 on:
   schedule:
-    - cron: '*/20 * * * *' # Runs every 20 minutes
+    - cron: '*/20 * * * *'
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -21,12 +21,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Debug: Print Working Directory
-        run: |
-          pwd
-          ls -la
-
       - name: Run Scraper
         run: python scraper.py
 
@@ -34,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pga-data
-          path: pga-data.db  # Ensure this is the correct path where the db is saved
+          path: pga-data.db
