@@ -1,22 +1,30 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import mysql.connector
 from sqlalchemy import create_engine
 
+
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_NAME = os.getenv("DB_NAME")
+
 # Creates database connection
 mydb = mysql.connector.connect(
- host="localhost",
- port=3307,
- user="admin",
- password="Pass1234",
- db="pga-data",
+ host=DB_HOST,
+ port=DB_PORT,
+ user=DB_USER,
+ password=DB_PASS,
+ db=DB_NAME,
 )
 
 mycursor = mydb.cursor()
 
 #creates new database engine
-engine = create_engine("mysql+mysqlconnector://admin:Pass1234@localhost:3307/pga-data")
+engine = create_engine(f"mysql+mysqlconnector://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
 
 #bypasses website firewall header
