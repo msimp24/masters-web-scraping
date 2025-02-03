@@ -2,30 +2,13 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import mysql.connector
-from sqlalchemy import create_engine
+import sqlite3
 
+DB_PATH = 'pga-data.db' 
 
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_USER = os.getenv("DB_USER")
-DB_PASS = os.getenv("DB_PASS")
-DB_NAME = os.getenv("DB_NAME")
-
-# Creates database connection
-mydb = mysql.connector.connect(
- host=DB_HOST,
- port=DB_PORT,
- user=DB_USER,
- password=DB_PASS,
- db=DB_NAME,
-)
-
-mycursor = mydb.cursor()
-
-#creates new database engine
-engine = create_engine(f"mysql+mysqlconnector://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
-
+# Creates SQLite database connection
+conn = sqlite3.connect(DB_PATH)
+mycursor = conn.cursor()
 
 #bypasses website firewall header
 headers = {
@@ -92,17 +75,17 @@ def scrape_data_to_database(headers):
       
       newTournamentId = tournamentId + 1
       print(newTournamentId)
-      mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = %s" , (newTournamentId,))
-      mydb.commit()
+      mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
+      conn.commit()
       
       df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('final_leaderboard', engine,if_exists='replace', index=False)
+      df.to_sql('final_leaderboard', conn,if_exists='replace', index=False)
       
     elif(isNewWeek):
       
       columns = ['tournament_id', 'Position', 'Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total']      
       df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('live_leaderboard', engine,if_exists='replace', index=False)
+      df.to_sql('live_leaderboard', conn,if_exists='replace', index=False)
     
     else:
       
