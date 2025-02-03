@@ -2,12 +2,12 @@ name: Run Golf Leaderboard Scraper
 
 on:
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '*/20 * * * *' # Runs every 20 minutes
   workflow_dispatch: # Allows manual trigger
 
 jobs:
   run-script:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use a Linux environment
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,20 +22,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download Existing Database (if available)
-        uses: actions/download-artifact@v4
-        with:
-          name: pga-data
-          path: ./
-
-      - name: Check if database exists
-        run: ls -lah pga-data.db || echo "⚠️ No existing database found, creating a new one."
+      - name: Debug: Print Working Directory
+        run: |
+          pwd
+          ls -la
 
       - name: Run Scraper
         run: python scraper.py
 
-      - name: Upload Updated SQLite Database
+      - name: Upload SQLite Database
         uses: actions/upload-artifact@v4
         with:
           name: pga-data
-          path: pga-data.db
+          path: pga-data.db  # Ensure this is the correct path where the db is saved
