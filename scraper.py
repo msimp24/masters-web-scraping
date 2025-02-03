@@ -76,6 +76,8 @@ def scrape_data_to_database(headers):
       df = pd.DataFrame(rows, columns = columns)
       df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
       
+      print("Saving to database path:", DB_PATH)  # Debugging line to check the path
+
       print('Final leaderboard updated')
       
       newTournamentId = tournamentId + 1
