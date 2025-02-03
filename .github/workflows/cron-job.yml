@@ -7,7 +7,7 @@ on:
 
 jobs:
   run-script:
-    runs-on: ubuntu-latest # Use a Linux environment
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,10 +22,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download Existing Database (if available)
+        uses: actions/download-artifact@v4
+        with:
+          name: pga-data
+          path: ./
+
+      - name: Check if database exists
+        run: ls -lah pga-data.db || echo "⚠️ No existing database found, creating a new one."
+
       - name: Run Scraper
         run: python scraper.py
 
-      - name: Upload SQLite Database
+      - name: Upload Updated SQLite Database
         uses: actions/upload-artifact@v4
         with:
           name: pga-data

@@ -9,7 +9,7 @@ conn.commit()
 
 def get_tournament_id():
 
-  mycursor.execute("select * from final_leaderboard")
+  mycursor.execute("select * from tournament_tracker")
 
   myresult = mycursor.fetchall()
   tournament_id = myresult

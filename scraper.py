@@ -73,10 +73,10 @@ def scrape_data_to_database(headers):
     if(status == 'Final'):
       columns = ['tournament_id', 'Position', 'Player', 'Score', 'R1', 'R2', 'R3', 'R4', 'Total', 'Earnings', 'Fedex Pts']  
       
-
-      
       df = pd.DataFrame(rows, columns = columns)
       df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
+      
+      print('Final leaderboard updated')
       
       newTournamentId = tournamentId + 1
       mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
