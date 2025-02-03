@@ -22,11 +22,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Python Script
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_NAME: ${{ secrets.DB_NAME }}
+      - name: Run Scraper
         run: python scraper.py
+
+      - name: Upload SQLite Database
+        uses: actions/upload-artifact@v4
+        with:
+          name: pga-data
+          path: pga-data.db
