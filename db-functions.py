@@ -9,10 +9,10 @@ conn.commit()
 
 def get_tournament_id():
 
-  mycursor.execute("select last_tournament_id from tournament_tracker")
+  mycursor.execute("select * from final_leaderboard")
 
-  myresult = mycursor.fetchone()
-  tournament_id = myresult[0]
+  myresult = mycursor.fetchall()
+  tournament_id = myresult
   
   return tournament_id
  
