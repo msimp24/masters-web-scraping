@@ -69,7 +69,6 @@ def scrape_data_to_database(headers):
     else:
       print('Failed to retrieve the page, Status code: {respsonse.status_code}')
       
-    print
       
     if(status == 'Final'):
       columns = ['tournament_id', 'Position', 'Player', 'Score', 'R1', 'R2', 'R3', 'R4', 'Total', 'Earnings', 'Fedex Pts']  
@@ -80,7 +79,6 @@ def scrape_data_to_database(headers):
       df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
       
       newTournamentId = tournamentId + 1
-      print(newTournamentId)
       mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
       conn.commit()
       
