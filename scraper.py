@@ -32,6 +32,7 @@ def scrape_data_to_database(headers):
     isNewWeek = True
   
     tournamentId = get_tournament_id()
+    
   
     url = f"https://www.espn.co.uk/golf/leaderboard/_/tournamentId/{tournamentId}"
     response = requests.get(url, headers=headers)
@@ -73,19 +74,22 @@ def scrape_data_to_database(headers):
     if(status == 'Final'):
       columns = ['tournament_id', 'Position', 'Player', 'Score', 'R1', 'R2', 'R3', 'R4', 'Total', 'Earnings', 'Fedex Pts']  
       
+
+      
+      df = pd.DataFrame(rows, columns = columns)
+      df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
+      
       newTournamentId = tournamentId + 1
       print(newTournamentId)
       mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
       conn.commit()
       
-      df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('final_leaderboard', conn,if_exists='replace', index=False)
       
     elif(isNewWeek):
       
       columns = ['tournament_id', 'Position', 'Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total']      
       df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('live_leaderboard', conn,if_exists='replace', index=False)
+      df.to_sql('live_leaderboard', conn, if_exists='replace', index=False)
     
     else:
       
