@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import sqlite3
 
-DB_PATH = 'pga-data.db' 
+DB_PATH = os.path.join(os.getcwd(), 'pga-data.db')
 
 # Creates SQLite database connection
 conn = sqlite3.connect(DB_PATH)
