@@ -73,6 +73,8 @@ def scrape_data_to_database(headers):
     if(status == 'Final'):
       columns = ['tournament_id', 'Position', 'Player', 'Score', 'R1', 'R2', 'R3', 'R4', 'Total', 'Earnings', 'Fedex Pts']  
       
+      print(columns)
+      
       df = pd.DataFrame(rows, columns = columns)
       df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
       
@@ -84,10 +86,14 @@ def scrape_data_to_database(headers):
       mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
       conn.commit()
       
-      
-    elif(isNewWeek):
+    elif(isNewWeek and status != 'Tournament Field'):
       
       columns = ['tournament_id', 'Position', 'Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total']      
+      
+      print(columns)
+      print(rows)
+      
+      
       df = pd.DataFrame(rows, columns = columns)
       df.to_sql('live_leaderboard', conn, if_exists='replace', index=False)
     
