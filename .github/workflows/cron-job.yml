@@ -2,14 +2,17 @@ name: Run Golf Scrapers
 
 on:
   schedule:
-    - cron: '*/20 * * * 4-7' # Runs every 20 minutes (Thursday to Sunday)
+    - cron: '*/20 * * * 4' # Runs every 20 minutes on Thursday
+    - cron: '*/20 * * * 5' # Runs every 20 minutes on Friday
+    - cron: '*/20 * * * 6' # Runs every 20 minutes on Saturday
+    - cron: '*/20 * * * 7' # Runs every 20 minutes on Sunday
     - cron: '0 12 * * 3' # Runs every Wednesday at 12:00 PM (Noon)
   workflow_dispatch: # Allows manual trigger
 
 jobs:
   leaderboard-scraper:
-    if: github.event.schedule == '*/20 * * * 4-7' # Only runs on Thu-Sun
     runs-on: ubuntu-latest
+    if: contains('4 5 6 7', format('{0}', github.event.schedule))
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -34,27 +37,6 @@ jobs:
           path: pga-data.db
 
   field-scraper:
-    if: github.event.schedule == '0 12 * * 3' # Only runs on Wednesdays
     runs-on: ubuntu-latest
+    if: github.event.schedule == '0 12 * * 3'
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run Field Scraper
-        run: python scrape-field.py
-
-      - name: Upload SQLite Database
-        uses: actions/upload-artifact@v4
-        with:
-          name: pga-data
-          path: pga-data.db
