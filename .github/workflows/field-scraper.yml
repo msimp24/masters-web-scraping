@@ -1,0 +1,32 @@
+name: Run Field Scraper
+
+on:
+  schedule:
+    - cron: '0 12 * * 3' # Runs every Wednesday at 12:00 PM UTC
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  field-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Field Scraper
+        run: python scrape-field.py
+
+      - name: Upload SQLite Database
+        uses: actions/upload-artifact@v4
+        with:
+          name: pga-data
+          path: pga-data.db
