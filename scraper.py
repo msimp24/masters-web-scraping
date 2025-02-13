@@ -33,6 +33,8 @@ def scrape_data_to_database(headers):
   
     tournamentId = get_tournament_id()
     
+    print(tournamentId)
+    
   
     url = f"https://www.espn.co.uk/golf/leaderboard/_/tournamentId/{tournamentId}"
     response = requests.get(url, headers=headers)
@@ -67,16 +69,14 @@ def scrape_data_to_database(headers):
         print("table not found, the structure might have changed")  
 
     else:
-      print('Failed to retrieve the page, Status code: {respsonse.status_code}')
+      print('Failed to retrieve the page, Status code: {response.status_code}')
       
       
     if(status == 'Final'):
       columns = ['tournament_id', 'Position', 'Player', 'Score', 'R1', 'R2', 'R3', 'R4', 'Total', 'Earnings', 'Fedex Pts']  
       
-      print(columns)
-      
       df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
+      df.to_sql('final_leaderboard', conn, if_exists='append', index=False)
       
       print("Saving to database path:", DB_PATH)  # Debugging line to check the path
 
