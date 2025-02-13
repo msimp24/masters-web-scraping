@@ -88,14 +88,26 @@ def scrape_data_to_database(headers):
       
     elif(isNewWeek and status != 'Tournament Field'):
       
-      columns = ['tournament_id', 'Position', 'Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total']      
-      
-      print(columns)
-      print(rows)
-      
-      
-      df = pd.DataFrame(rows, columns = columns)
-      df.to_sql('live_leaderboard', conn, if_exists='replace', index=False)
+      if "Round 1" in status:
+        
+        columns = ['tournament_id','Position','Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total']      
+        
+        print(columns)
+        print(rows)
+        
+        
+        df = pd.DataFrame(rows, columns = columns)
+        df.to_sql('live_leaderboard', conn, if_exists='replace', index=False)
+        
+      else:     
+        columns = ['tournament_id','Position','Change','Player', 'Score','Today','Thru','R1', 'R2', 'R3', 'R4', 'Total'] 
+        df = pd.DataFrame(rows, columns=columns)
+        df = df.drop(columns=["Change"]) 
+        
+        print(df)
+        
+        df.to_sql('live_leaderboard', conn, if_exists='replace', index=False) 
+   
     
     else:
       
