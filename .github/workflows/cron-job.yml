@@ -5,7 +5,7 @@ on:
     - cron: '*/20 * * * 4' # Runs every 20 minutes on Thursday
     - cron: '*/20 * * * 5' # Runs every 20 minutes on Friday
     - cron: '*/20 * * * 6' # Runs every 20 minutes on Saturday
-    - cron: '*/20 * * * 7' # Runs every 20 minutes on Sunday
+    - cron: '*/20 * * * 0' # Runs every 20 minutes on Sunday
     - cron: '0 12 * * 3' # Runs every Wednesday at 12:00 PM (Noon)
   workflow_dispatch: # Allows manual trigger
 
