@@ -45,8 +45,12 @@ if response.status_code == 200:
        row_data[0] = get_tournament_id()
        rows.append(row_data)
        
-       
+   columns[0] = 'tournament_id'
+   columns[1] = 'player'
+   columns[2] = 'tee_time'
+   
+  
    
    df = pd.DataFrame(rows, columns = columns)
-   df.to_sql('final_leaderboard', conn, if_exists='replace', index=False)
-       
+   df.to_sql('tee_times', conn, if_exists='replace', index=False)
+   print('Tee times updated')    
