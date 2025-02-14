@@ -50,7 +50,6 @@ if response.status_code == 200:
    columns[2] = 'tee_time'
    
   
-   
    df = pd.DataFrame(rows, columns = columns)
    df.to_sql('tee_times', conn, if_exists='replace', index=False)
    print('Tee times updated')    
