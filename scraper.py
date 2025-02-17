@@ -82,6 +82,11 @@ def scrape_data_to_database(headers):
 
       print('Final leaderboard updated')
       
+      mycursor.execute('update tournaments set status = "complete" where tournament_id = ?', tournamentId)
+      
+      conn.commit()
+
+      
       newTournamentId = tournamentId + 1
       mycursor.execute("UPDATE tournament_tracker SET last_tournament_id = ?" , (newTournamentId,))
       conn.commit()
