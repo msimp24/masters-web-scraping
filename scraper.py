@@ -28,6 +28,7 @@ def get_tournament_id():
   return tournament_id
 
 def scrape_data_to_database(headers):
+    print('test')
   
     isNewWeek = True
   
